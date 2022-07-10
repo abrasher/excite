@@ -1,10 +1,29 @@
-# Vue 3 + TypeScript + Vite
+# !! Work in Progress Template !!
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+# Office Excel Add-in with Vue 3 + TypeScript + Vite
+
+This template should help you get started with office add-ins in Excel with Vue 3, TypeScript and Vite.
 
 ## Recommended IDE Setup
 
 - [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+
+## Install
+
+```
+# install dev ssl certs
+npx office-addin-dev-certs install
+```
+
+```
+# start dev server
+npm run dev
+```
+
+```
+# sideload add-in to excel
+npm run sideload
+```
 
 ## Type Support For `.vue` Imports in TS
 
