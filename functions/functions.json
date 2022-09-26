@@ -1,0 +1,13 @@
+{
+    "functions": [
+        {
+            "description": "test function",
+            "id": "TEST",
+            "name": "TEST",
+            "parameters": [],
+            "result": {
+                "type": "string"
+            }
+        }
+    ]
+}
