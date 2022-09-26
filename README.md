@@ -3,6 +3,7 @@
 # Office Excel Add-in with Vue 3 + TypeScript + Vite
 
 This template should help you get started with office add-ins in Excel with Vue 3, TypeScript and Vite.
+
 Supports:
 - Taskpane
 - Custom excel functions
