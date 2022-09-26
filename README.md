@@ -3,35 +3,81 @@
 # Office Excel Add-in with Vue 3 + TypeScript + Vite
 
 This template should help you get started with office add-ins in Excel with Vue 3, TypeScript and Vite.
-
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+Supports:
+- Taskpane
+- Custom excel functions
+- Generate function metadata automatically
 
 ## Install
 
+Install dev ssl certs
 ```
-# install dev ssl certs
+npm run install-certs
+```
+or
+```
 npx office-addin-dev-certs install
 ```
 
+Start dev server
 ```
-# start dev server
 npm run dev
 ```
 
+Sideload add-in to excel
 ```
-# sideload add-in to excel
 npm run sideload
 ```
 
 ### Todo
 
-- [ ] Custom Functions
-  - [ ] Initial setup example
-  - [ ] Vite plugin for metadata generation
+- [x] Custom Functions
+  - [x] Initial setup example
+  - [x] Vite plugin for metadata generation
+- [ ] Use "vite-plugin-office-addin" which handles manifest.xml during building (see example below)
 - [ ] Commands
 - [ ] Eslint
+
+## Handle Manifest.xml during build
+I should add this in the template, but an example of how to replace URL in the manifest.xml file
+
+```
+import vue from "@vitejs/plugin-vue"
+import { readFileSync } from "fs"
+import { homedir } from "os"
+import { resolve } from "path"
+import { defineConfig } from "vite"
+import officeAddin from "vite-plugin-office-addin"
+
+// https://vitejs.dev/config/
+export default defineConfig(({ command, mode }) => {
+  const plugins = [
+    vue(),
+    officeAddin({
+      devUrl: "https://localhost:3000",
+      prodUrl: "https://yourdomain.com",
+    }),
+  ]
+
+  if (mode === "development") {
+    return {
+      server: {
+        port: 3000,
+        strictPort: true,
+        https: {
+          key: readFileSync(resolve(`${homedir}/.office-addin-dev-certs/localhost.key`)),
+          cert: readFileSync(resolve(`${homedir}/.office-addin-dev-certs/localhost.crt`)),
+          ca: readFileSync(resolve(`${homedir}/.office-addin-dev-certs/ca.crt`)),
+        },
+      },
+      plugins,
+    }
+  }
+  return {
+    plugins,
+  }
+})
+```
 
 ## Type Support For `.vue` Imports in TS
 
