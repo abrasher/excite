@@ -5,80 +5,48 @@
 This template should help you get started with office add-ins in Excel with Vue 3, TypeScript and Vite.
 
 Supports:
+
 - Taskpane
+- Commands
 - Custom excel functions
+- Shared Runtime
 - Generate function metadata automatically
+- Generate dev and prod versions of the manifest
+- Running locally with https
 
 ## Install
 
 Install dev ssl certs
+
 ```
 npm run install-certs
 ```
+
 or
+
 ```
 npx office-addin-dev-certs install
 ```
 
 Start dev server
+
 ```
 npm run dev
 ```
 
 Sideload add-in to excel
+
 ```
 npm run sideload
 ```
 
 ### Todo
 
-- [x] Custom Functions
-  - [x] Initial setup example
-  - [x] Vite plugin for metadata generation
-- [ ] Use "vite-plugin-office-addin" which handles manifest.xml during building (see example below)
-- [ ] Commands
 - [ ] Eslint
 
-## Handle Manifest.xml during build
-I should add this in the template, but an example of how to replace URL in the manifest.xml file
+## Handling Manifest.xml during build
 
-```
-import vue from "@vitejs/plugin-vue"
-import { readFileSync } from "fs"
-import { homedir } from "os"
-import { resolve } from "path"
-import { defineConfig } from "vite"
-import officeAddin from "vite-plugin-office-addin"
-
-// https://vitejs.dev/config/
-export default defineConfig(({ command, mode }) => {
-  const plugins = [
-    vue(),
-    officeAddin({
-      devUrl: "https://localhost:3000",
-      prodUrl: "https://yourdomain.com",
-    }),
-  ]
-
-  if (mode === "development") {
-    return {
-      server: {
-        port: 3000,
-        strictPort: true,
-        https: {
-          key: readFileSync(resolve(`${homedir}/.office-addin-dev-certs/localhost.key`)),
-          cert: readFileSync(resolve(`${homedir}/.office-addin-dev-certs/localhost.crt`)),
-          ca: readFileSync(resolve(`${homedir}/.office-addin-dev-certs/ca.crt`)),
-        },
-      },
-      plugins,
-    }
-  }
-  return {
-    plugins,
-  }
-})
-```
+This is handled by the "vite-plugin-office-addin" plugin for vite which will update the manifest.xml for production builds with the URL specified in the file `.env.production` or overridden on the command line when you build by setting the environment variable `ADDIN_PROD_URL=<your prod url` s
 
 ## Type Support For `.vue` Imports in TS
 

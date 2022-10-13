@@ -4,6 +4,7 @@ import { readFileSync } from "fs"
 import { homedir } from "os"
 import { resolve } from "path"
 import customFunctionsMetadataPlugin from "vite-plugin-custom-functions-metadata"
+import officeAddin from "vite-plugin-office-addin"
 
 const homeDir = homedir()
 // https://vitejs.dev/config/
@@ -11,9 +12,10 @@ export default defineConfig({
   plugins: [
     vue(),
     customFunctionsMetadataPlugin({
-      inputFile: resolve(__dirname, "functions/functions.ts"),
-      outputFile: resolve(__dirname, "functions/functions.json"),
+      inputFile: resolve(__dirname, "src/functions/functions.ts"),
+      outputFile: resolve(__dirname, "public/functions.json"),
     }),
+    officeAddin({}),
   ],
   server: {
     port: 3000,

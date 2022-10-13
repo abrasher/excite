@@ -4,7 +4,7 @@
   <!-- Begin Basic Settings: Add-in metadata, used for all versions of Office unless override provided. -->
 
   <!-- IMPORTANT! Id must be unique for your add-in, if you reuse this manifest ensure that you change this id to a new GUID. -->
-  <Id>095f3d1c-80c5-4b3f-bb2b-4c4c05af720a</Id>
+  <Id>095f3d1c-80c5-4b3f-bb2b-4c4c15af720a</Id>
 
   <!--Version. Updates from the store only get triggered if there is a version change. -->
   <Version>1.0.0.0</Version>
@@ -33,10 +33,25 @@
   <Hosts>
     <Host Name="Workbook" />
   </Hosts>
+  
+  <!-- 
+    
+    Excite Customization:
+      
+      Shared Runtime Configuration see: https://learn.microsoft.com/en-us/office/dev/add-ins/develop/configure-your-add-in-to-use-a-shared-runtime#configure-the-manifest
+  
+  -->
+  <Requirements>
+    <Sets DefaultMinVersion="1.1">
+      <Set Name="SharedRuntime" MinVersion="1.1"/>
+    </Sets>
+  </Requirements>
+
   <DefaultSettings>
     <SourceLocation DefaultValue="https://localhost:3000/index.html" />
   </DefaultSettings>
   <!-- End TaskPane Mode integration.  -->
+ 
 
   <Permissions>ReadWriteDocument</Permissions>
 
@@ -49,6 +64,19 @@
       <!-- Excel host is Workbook, Word host is Document, and PowerPoint host is Presentation. -->
       <!-- Make sure the hosts you override match the hosts declared in the top section of the manifest. -->
       <Host xsi:type="Workbook">
+
+        <!-- 
+    
+          Excite Customization:
+            
+            Shared Runtime Configuration see: https://learn.microsoft.com/en-us/office/dev/add-ins/develop/configure-your-add-in-to-use-a-shared-runtime#configure-the-manifest
+        
+        -->
+        <Runtimes>
+          <Runtime resid="Taskpane.Url" lifetime="long"/>
+        </Runtimes>
+
+
         <AllFormFactors>
           <!-- Define Custom Functions -->
           <ExtensionPoint xsi:type="CustomFunctions">
@@ -56,7 +84,17 @@
               <SourceLocation resid="Functions.Script.Url" />
             </Script>
             <Page>
-              <SourceLocation resid="Functions.Page.Url" />
+
+              <!-- 
+    
+                Excite Customization:
+                  
+                  Shared Runtime Configuration see: https://learn.microsoft.com/en-us/office/dev/add-ins/develop/configure-your-add-in-to-use-a-shared-runtime#configure-the-manifest
+              
+              -->
+              <SourceLocation resid="Taskpane.Url" />
+
+
             </Page>
             <Metadata>
               <SourceLocation resid="Functions.Metadata.Url" />
@@ -77,9 +115,17 @@
             <!-- Point to a url resource which details how the add-in should be used. -->
             <LearnMoreUrl resid="GetStarted.LearnMoreUrl" />
           </GetStarted>
-          <!-- Function file is a HTML page that includes the JavaScript where functions for ExecuteAction will be called.
-            Think of the FunctionFile as the code behind ExecuteFunction. -->
-          <!-- <FunctionFile resid="Commands.Url" /> -->
+          
+          <!-- 
+    
+            Excite Customization:
+              
+              Shared Runtime Configuration see: https://learn.microsoft.com/en-us/office/dev/add-ins/develop/configure-your-add-in-to-use-a-shared-runtime#configure-the-manifest
+          
+          -->
+          <!-- Function file is a HTML page that includes the JavaScript where functions for ExecuteAction will be called. Think of the FunctionFile as the code behind ExecuteFunction. -->
+          <FunctionFile resid="Taskpane.Url"/>
+
 
           <!-- PrimaryCommandSurface is the main Office Ribbon. -->
           <ExtensionPoint xsi:type="PrimaryCommandSurface">
@@ -119,6 +165,32 @@
                     <SourceLocation resid="Taskpane.Url" />
                   </Action>
                 </Control>
+
+                <!-- 
+                  
+                  Excite Customization:
+                  
+                  Test command to show how it can hook into the shared runtime as well
+
+                  USAGE: Highlight a range of cells and it will turn them green on click
+
+                -->
+
+                <Control xsi:type="Button" id="testCommand">
+                  <Label resid="TaskpaneButton.Label1"/>
+                  <Supertip>
+                    <Title resid="TaskpaneButton.Label1"/>
+                    <Description resid="TaskpaneButton.Tooltip1"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16x16"/>
+                    <bt:Image size="32" resid="Icon.32x32"/>
+                    <bt:Image size="80" resid="Icon.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ExecuteFunction">
+									  <FunctionName>testCommand</FunctionName>
+								  </Action>
+                </Control>
               </Group>
             </OfficeTab>
           </ExtensionPoint>
@@ -135,12 +207,28 @@
       </bt:Images>
       <bt:Urls>
         <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812" />
-        <!-- <bt:Url id="Commands.Url" DefaultValue="https://localhost:3000/commands.html" /> -->
+        
+
         <bt:Url id="Taskpane.Url" DefaultValue="https://localhost:3000/index.html" />
-        <bt:Url id="Taskpane.Url" DefaultValue="https://localhost:3000/index.html" />
-        <bt:Url id="Functions.Page.Url" DefaultValue="https://localhost:3000/functions/index.html" />
-        <bt:Url id="Functions.Script.Url" DefaultValue="https://localhost:3000/functions/functions.ts" />
-        <bt:Url id="Functions.Metadata.Url" DefaultValue="https://localhost:3000/functions/functions.json" />
+
+        <!-- 
+          Excite Customization:
+
+          Because of the shared runtime configuration, this URL is now never called, so it can point to nothing but it is still required
+          for the directive above or the manifest is invalid
+          
+        -->
+        <bt:Url id="Functions.Script.Url" DefaultValue="https://localhost:3000/nothing.js" />
+
+        <!--
+
+          Excite Customization:
+          
+          This file is generated by the customFunctionsMetadataPlugin in the vite.config and placed into the public folder
+
+        -->
+        <bt:Url id="Functions.Metadata.Url" DefaultValue="https://localhost:3000/functions.json" />
+
       </bt:Urls>
       <!-- ShortStrings max characters==125. -->
       <bt:ShortStrings>
@@ -148,11 +236,13 @@
         <bt:String id="GetStarted.Title" DefaultValue="Get started with your excite add-in!" />
         <bt:String id="CommandsGroup.Label" DefaultValue="Commands Group" />
         <bt:String id="TaskpaneButton.Label" DefaultValue="Show Taskpane" />
+        <bt:String id="TaskpaneButton.Label1" DefaultValue="Test Command" />
       </bt:ShortStrings>
       <!-- LongStrings max characters==250. -->
       <bt:LongStrings>
         <bt:String id="GetStarted.Description" DefaultValue="Your sample add-in loaded succesfully. Go to the HOME tab and click the 'Show Taskpane' button to get started." />
         <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Click to Show a Taskpane" />
+        <bt:String id="TaskpaneButton.Tooltip1" DefaultValue="Click to perform a test action within the shared runtime" />
       </bt:LongStrings>
     </Resources>
   </VersionOverrides>

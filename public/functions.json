@@ -4,6 +4,9 @@
             "description": "test function",
             "id": "TEST",
             "name": "TEST",
+            "options": {
+                "volatile": true
+            },
             "parameters": [],
             "result": {
                 "type": "string"

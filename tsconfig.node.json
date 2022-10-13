@@ -3,11 +3,7 @@
     "composite": true,
     "module": "esnext",
     "moduleResolution": "node",
-    "types": [
-      "node"
-    ]
+    "types": ["node"]
   },
-  "include": [
-    "vite.config.ts"
-  ]
+  "include": ["vite.config.ts"]
 }
